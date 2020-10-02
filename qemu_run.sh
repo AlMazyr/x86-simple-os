@@ -9,6 +9,7 @@ qemu-system-${ARCH} \
 	-no-reboot \
 	-monitor telnet:127.0.0.1:${MONITOR_PORT},server,nowait \
 	-cdrom ${ISO} \
+	-curses \
 	#-kernel ${BIN} \
 	#-bios ./OVMF.fd \
 
