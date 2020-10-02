@@ -2,16 +2,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
  
-/* This tutorial will only work for the 32-bit ix86 targets. */
-#if !defined(__i386__)
-#error "This tutorial needs to be compiled with a ix86-elf compiler"
-#endif
-
 #define VGA_WIDTH	25
 #define VGA_HEIGHT	80
 
@@ -46,11 +40,13 @@ void terminal_initialize()
 
 void terminal_putchar(const char ch)
 {
-	size_t pos = terminal_row * VGA_WIDTH + terminal_column;
+	size_t pos = terminal_row * VGA_WIDTH + terminal_column++;
 	terminal_buffer[pos] = VGA_ENTRY(ch, terminal_color);
-	terminal_column = ++terminal_column % VGA_WIDTH;
-	if (!terminal_column)
-		terminal_row = ++terminal_row % VGA_HEIGHT;
+	terminal_column %= VGA_WIDTH;
+	if (!terminal_column) {
+		terminal_row++;
+		terminal_row %= VGA_HEIGHT;
+	}
 }
 
 void terminal_writestring(const char* str)

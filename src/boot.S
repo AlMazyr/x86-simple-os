@@ -1,16 +1,22 @@
 /* Mutiboot header */
 
-.set ALIGN, 	1<<0
-.set MEMINFO, 	1<<1
-.set FLAGS,	ALIGN|MEMINFO
-.set MAGIC, 	0x1BADB002
-.set CHECKSUM, 	-(MAGIC+FLAGS)
+.set MULTIBOOT2_MAGIC,		0xE85250D6
+.set MULTIBOOT2_ARCH,		0
+.set MULTIBOOT2_SIZE,		multiboot_header_end - multiboot_header
+.set MULTIBOOT2_CHECKSUM,	-(MULTIBOOT2_MAGIC + MULTIBOOT2_ARCH + MULTIBOOT2_SIZE)
 
 .section .multiboot
-.align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
+.align 8
+multiboot_header:
+.long MULTIBOOT2_MAGIC
+.long MULTIBOOT2_ARCH
+.long MULTIBOOT2_SIZE
+.long MULTIBOOT2_CHECKSUM
+// end tag
+.short 0
+.short 0
+.long 8
+multiboot_header_end:
 
 .section .bss
 .align 16
@@ -20,6 +26,7 @@ stack_top:
 
 
 .section .text
+.code32
 .global _start
 .type _start, @function
 _start:

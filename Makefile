@@ -1,6 +1,7 @@
-CROSS ?= i686-elf
+CROSS ?= x86_64-elf
 
 COPS = -Wall -Wextra -nostdlib -nostartfiles -ffreestanding -Iinclude -std=gnu99
+LOPS = --nmagic
 ASMOPS = -Iinclude
 
 BUILD_DIR = build
@@ -37,4 +38,4 @@ DEP_FILES = $(OBJ_FILES:%.o=%.d)
 -include $(DEP_FILES)
 
 $(KERNEL): $(SRC_DIR)/linker.ld $(OBJ_FILES)
-	$(CROSS)-gcc $(COPS) -T $(SRC_DIR)/linker.ld -o $(KERNEL)  $(OBJ_FILES)
+	$(CROSS)-ld $(LOPS) -T $(SRC_DIR)/linker.ld -o $(KERNEL)  $(OBJ_FILES)
